@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ajeeth Venkat Prasat · Embedded Systems Engineer</title>
+<meta name="description" content="Embedded Systems Engineer in Freiburg: biomedical wearables, IoT edge devices, analog front-ends, signal processing and edge AI.">
+<meta property="og:title" content="Ajeeth Venkat Prasat · Embedded Systems Engineer">
+<meta property="og:description" content="Self-powered gait-analysis insole (93.58% accuracy), sensor-fusion robotics, TinyML IoT and more.">
+<meta property="og:image" content="assets/architecture.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A1320'/%3E%3Cpath d='M8 36 L20 36 L25 16 L31 50 L36 30 L56 30' fill='none' stroke='%2306B6D4' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070E18; --bg-2:#0A1320; --surface:#0D1826; --surface-2:#111F31; --line:#1B2C41; --line-2:#26405B;
+  --text:#E6EEF5; --text-2:#C3D1DE; --muted:#8499AD; --accent:#22D3EE; --accent-2:#06B6D4; --accent-ink:#04222B;
+  --warm:#F59E0B; --ok:#22C55E; --panel:#FFFFFF;
+  --shadow:0 20px 60px -30px rgba(0,0,0,.6);
+  --radius:16px; --maxw:1160px;
+  --f-display:"Space Grotesk",system-ui,sans-serif; --f-body:"Inter",system-ui,-apple-system,Segoe UI,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+:root[data-theme="light"]{
+  --bg:#F6F8FB; --bg-2:#EEF2F7; --surface:#FFFFFF; --surface-2:#F3F6FA; --line:#DDE5EE; --line-2:#C9D5E2;
+  --text:#0E1A2B; --text-2:#23324A; --muted:#5A6A7E; --accent:#0E7490; --accent-2:#0891B2; --accent-ink:#FFFFFF;
+  --warm:#C2410C; --shadow:0 20px 50px -30px rgba(14,26,43,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent-2);color:#041017}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.mono{font-family:var(--f-mono)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+h1,h2,h3,h4{font-family:var(--f-display);letter-spacing:-.02em;line-height:1.1}
+h2.title{font-size:clamp(30px,4.4vw,46px);font-weight:600;margin:10px 0 14px}
+.lede{color:var(--text-2);font-size:18px;max-width:720px}
+section{padding:110px 0;position:relative}
+.sec-head{margin-bottom:46px}
+
+nav.top{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+nav.top.scrolled{background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+nav .bar{display:flex;align-items:center;gap:28px;height:68px}
+.logo{font-family:var(--f-mono);font-weight:500;font-size:15px;display:flex;align-items:center;gap:10px}
+.logo svg{width:28px;height:28px}
+nav .links{display:flex;gap:26px;margin-left:auto;font-size:14px;color:var(--text-2)}
+nav .links a{position:relative;padding:4px 0}
+nav .links a::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:2px;background:var(--accent);transition:right .25s}
+nav .links a:hover::after{right:0}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);color:var(--text);display:grid;place-items:center;cursor:pointer}
+.icon-btn svg{width:18px;height:18px}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:500;font-size:15px;padding:12px 20px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--text);transition:transform .2s,border-color .2s,background .2s;cursor:pointer}
+.btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{padding:8px 14px;font-size:13.5px;border-radius:10px}
+.btn svg{width:17px;height:17px}
+#menuBtn{display:none}
+
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:120px 0 200px;overflow:hidden}
+.hero canvas{position:absolute;left:0;right:0;bottom:30px;width:100%;height:180px;opacity:.9;pointer-events:none}
+.hero .grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 60% 40%,#000 10%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at 60% 40%,#000 10%,transparent 70%);opacity:.5;pointer-events:none}
+.hero .inner{display:grid;grid-template-columns:1.35fr 1fr;gap:60px;align-items:center;position:relative}
+.status{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12.5px;color:var(--text-2);border:1px solid var(--line-2);background:var(--surface);padding:7px 14px;border-radius:999px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}80%,100%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
+.hero h1{font-size:clamp(44px,7.2vw,86px);font-weight:600;margin:22px 0 18px;letter-spacing:-.035em}
+.hero h1 span{color:var(--accent)}
+.hero .role{font-size:clamp(17px,2vw,21px);color:var(--text-2);max-width:620px}
+.hero .role b{color:var(--text);font-weight:500}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.portrait{position:relative;justify-self:center;width:min(360px,80vw);aspect-ratio:1}
+.portrait .ring{position:absolute;inset:-14px;border-radius:50%;border:1px dashed var(--line-2);animation:spin 40s linear infinite}
+.portrait .ring::before{content:"";position:absolute;top:50%;left:-5px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.portrait img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:6px solid var(--surface-2);box-shadow:var(--shadow)}
+.float{position:absolute;background:var(--surface);border:1px solid var(--line-2);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);font-size:13px;color:var(--text-2);animation:bob 6s ease-in-out infinite}
+.float b{display:block;font-family:var(--f-display);font-size:22px;color:var(--text);line-height:1.1}
+.float.a{left:-34px;bottom:34px}
+.float.b{right:-26px;top:22px;animation-delay:-3s}
+@keyframes bob{50%{transform:translateY(-8px)}}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+.stat{padding:26px 26px 24px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .v{font-family:var(--f-display);font-size:38px;font-weight:600;letter-spacing:-.03em;line-height:1}
+.stat .v small{font-size:18px;color:var(--muted);margin-left:2px}
+.stat .l{color:var(--muted);font-size:14px;margin-top:8px}
+.strip{margin-top:-40px;position:relative;z-index:2;padding-bottom:20px}
+
+.thesis{background:linear-gradient(180deg,transparent,var(--bg-2) 18%,var(--bg-2) 82%,transparent)}
+.pra{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:46px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.card h4{font-size:18px;margin:8px 0 8px}
+.card p{color:var(--text-2);font-size:15px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.tab{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;color:var(--text-2);font:inherit;transition:border-color .2s,background .2s,transform .2s;position:relative;overflow:hidden}
+.tab .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);letter-spacing:.1em}
+.tab .t{display:block;font-family:var(--f-display);font-size:18px;font-weight:600;color:var(--text);margin-top:4px}
+.tab::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--accent);transition:width .35s}
+.tab[aria-selected="true"]{border-color:var(--accent);background:var(--surface-2)}
+.tab[aria-selected="true"] .n{color:var(--accent)}
+.tab[aria-selected="true"]::after{width:100%}
+.tab:hover{transform:translateY(-2px)}
+.panel{display:none;grid-template-columns:1fr 1.25fr;gap:34px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+.panel.on{display:grid;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.panel h3{font-size:26px;margin-bottom:12px}
+.panel p{color:var(--text-2);margin-bottom:14px}
+.panel ul{list-style:none;display:grid;gap:9px}
+.panel li{position:relative;padding-left:22px;color:var(--text-2);font-size:15px}
+.panel li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:2px;background:var(--accent);transform:rotate(45deg)}
+.figure{background:var(--panel);border-radius:12px;padding:12px;border:1px solid var(--line)}
+.figure img{border-radius:6px;width:100%}
+.figcap{font-size:13px;color:var(--muted);margin-top:10px}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.metric-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+.metric{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.metric .v{font-family:var(--f-display);font-size:30px;font-weight:600;line-height:1}
+.metric .v small{font-size:15px;color:var(--muted)}
+.metric .l{font-size:13px;color:var(--muted);margin-top:6px}
+.bars{display:grid;gap:12px}
+.barrow{display:grid;grid-template-columns:140px 1fr 48px;align-items:center;gap:12px;font-size:14px;color:var(--text-2)}
+.bartrack{height:12px;border-radius:6px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.barfill{height:100%;width:0;border-radius:6px;background:var(--accent-2);transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+.barfill.warm{background:var(--warm)}
+.barrow .num{font-family:var(--f-mono);font-size:13px;text-align:right;color:var(--text)}
+.legend{display:flex;gap:18px;font-size:13px;color:var(--muted);margin-top:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.honest{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.honest .card{border-left:3px solid var(--warm)}
+.honest .card.next{border-left-color:var(--accent)}
+.honest ul{list-style:none;display:grid;gap:10px;margin-top:6px}
+.honest li{color:var(--text-2);font-size:15px}
+.honest li b{color:var(--text)}
+
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.proj{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s,border-color .3s,box-shadow .3s;scroll-margin-top:90px}
+.proj:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--shadow)}
+.proj .media{background:var(--panel);padding:14px;border-bottom:1px solid var(--line);aspect-ratio:16/8;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.proj .media img{max-height:100%;width:auto;max-width:100%;object-fit:contain}
+.proj .media.photo{padding:0}
+.proj .media.photo img{width:100%;height:100%;object-fit:cover}
+.proj .body{padding:24px 26px 26px;display:flex;flex-direction:column;flex:1}
+.proj .meta{font-family:var(--f-mono);font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.proj h3{font-size:24px;margin:8px 0 10px}
+.proj p{color:var(--text-2);font-size:15px}
+.kpis{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.kpi{border:1px solid var(--line-2);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--muted)}
+.kpi b{font-family:var(--f-display);font-size:18px;color:var(--text);margin-right:6px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:12px}
+.tag{font-family:var(--f-mono);font-size:12px;padding:4px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--text-2)}
+.proj .foot{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.note{font-size:13px;color:var(--muted);font-style:italic}
+
+.timeline{position:relative;display:grid;gap:18px}
+.timeline::before{content:"";position:absolute;left:170px;top:8px;bottom:8px;width:1px;background:var(--line-2)}
+.tl{display:grid;grid-template-columns:150px 1fr;gap:40px;position:relative}
+.tl .when{font-family:var(--f-mono);font-size:13px;color:var(--muted);text-align:right;padding-top:22px}
+.tl .card{position:relative}
+.tl .card::before{content:"";position:absolute;left:-26px;top:26px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+.tl .card h4{margin:0}
+.tl .org{color:var(--accent);font-size:14px;font-weight:500;margin:2px 0 10px}
+.tl ul{list-style:none;display:grid;gap:6px}
+.tl li{color:var(--text-2);font-size:15px;padding-left:18px;position:relative}
+.tl li::before{content:"→";position:absolute;left:0;color:var(--muted)}
+
+.skillgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.skillgrid .card h4{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;margin:0 0 14px}
+.skillgrid .card h4 span{font-family:var(--f-mono);font-size:11px;color:var(--accent);letter-spacing:.12em;font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13.5px;padding:5px 11px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);transition:border-color .2s,color .2s}
+.chip:hover{border-color:var(--accent);color:var(--text)}
+.matrix-wrap{margin-top:34px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+table.mx{width:100%;border-collapse:collapse;min-width:720px;font-size:14px}
+table.mx th{font-family:var(--f-mono);font-weight:400;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px;border-bottom:1px solid var(--line-2);text-align:center}
+table.mx th:first-child,table.mx td:first-child{text-align:left;padding-left:22px}
+table.mx td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:center;color:var(--text-2)}
+table.mx tr:last-child td{border-bottom:0}
+table.mx tbody tr:hover td{background:var(--surface-2)}
+.d{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.d.h{background:transparent;border:2px solid var(--accent)}
+
+.pubs{display:grid;gap:14px}
+.pub{display:grid;grid-template-columns:120px 1fr;gap:26px;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.pub .yr{font-family:var(--f-display);font-size:34px;font-weight:600;color:var(--accent);line-height:1}
+.pub .yr small{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:8px;font-weight:400}
+.pub h4{font-size:20px}
+.pub .ve{color:var(--muted);font-style:italic;font-size:14.5px;margin-top:4px}
+.edu{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+
+.contact{padding:120px 0 60px}
+.cbox{border:1px solid var(--line-2);border-radius:28px;padding:clamp(30px,6vw,64px);background:radial-gradient(ellipse at 90% 0%,color-mix(in srgb,var(--accent-2) 20%,transparent),transparent 55%),var(--surface);position:relative;overflow:hidden}
+.cbox h2{font-size:clamp(34px,5.5vw,62px);font-weight:600;max-width:760px}
+.cbox h2 span{color:var(--accent)}
+.cbox p{color:var(--text-2);max-width:620px;margin:18px 0 30px;font-size:17px}
+.cbox .cta{display:flex;flex-wrap:wrap;gap:12px}
+footer{padding:30px 0 40px;color:var(--muted);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
+
+@media (max-width:980px){
+  .hero .inner{grid-template-columns:1fr;gap:56px}
+  .portrait{order:-1;width:min(260px,70vw)}
+  .float.a{left:-20px}.float.b{right:-16px}
+  .panel{grid-template-columns:1fr}
+  .results,.honest,.projects,.edu{grid-template-columns:1fr}
+  .skillgrid{grid-template-columns:1fr 1fr}
+  .pra{grid-template-columns:1fr}
+  .tabs{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  nav .links{display:none;position:absolute;top:68px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 24px 16px}
+  nav .links.open{display:flex}
+  nav .links a{padding:12px 0;border-bottom:1px solid var(--line)}
+  #menuBtn{display:grid}
+  nav .bar{gap:10px}
+  nav .bar .links + .icon-btn{margin-left:auto}
+  .nav-pdf{display:none}
+  .wrap{padding:0 16px}
+  section{padding:80px 0}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat{border-bottom:1px solid var(--line)}
+  .stat:nth-child(2n){border-right:0}
+  .stat .v{font-size:30px}
+  .skillgrid{grid-template-columns:1fr}
+  .timeline::before{left:6px}
+  .tl{grid-template-columns:1fr;gap:6px;padding-left:28px}
+  .tl .when{text-align:left;padding-top:0}
+  .tl .card::before{left:-28px;top:-22px}
+  .pub{grid-template-columns:1fr;gap:10px}
+  .barrow{grid-template-columns:110px 1fr 44px;font-size:13px}
+  .metric-row{grid-template-columns:1fr 1fr}
+  .hero canvas{height:130px;bottom:40px}
+  .hero{padding-bottom:170px}
+  .float{font-size:12px;padding:8px 11px}.float b{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <div class="wrap bar">
+    <a href="#top" class="logo" aria-label="Home">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0A1320"/><path d="M8 36 L20 36 L25 16 L31 50 L36 30 L56 30" fill="none" stroke="#06B6D4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>ajeeth.vp</span>
+    </a>
+    <div class="links" id="links">
+      <a href="#thesis">Thesis</a><a href="#work">Projects</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
+    </div>
+    <a class="btn small nav-pdf" href="Ajeeth_Venkat_Prasat_Engineering_Portfolio.pdf" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>Portfolio PDF</a>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle light and dark theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+    </button>
+    <button class="icon-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="grid-bg"></div>
+  <canvas id="wave" aria-hidden="true"></canvas>
+  <div class="wrap inner">
+    <div>
+      <span class="status"><i></i>Open to embedded systems roles · Freiburg, DE</span>
+      <h1>Ajeeth Venkat <span>Prasat</span></h1>
+      <p class="role"><b>Embedded Systems Engineer.</b> I build the whole chain from sensor to decision: transducers with awkward signals, analog front-ends that tame them, firmware that runs them and edge AI that makes sense of them, mostly for <b>biomedical wearables</b> and <b>intelligent IoT devices</b>.</p>
+      <div class="cta">
+        <a class="btn primary" href="#thesis">See the flagship project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6l6 6-6 6"/></svg></a>
+        <a class="btn" href="https://github.com/ajeethv27" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 00-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 015.8 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0012 .5z"/></svg>GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/ajeethv" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.3-1.8 3.6 0 4.3 2.4 4.3 5.4v6.3zM5.3 7.4a2.1 2.1 0 110-4.2 2.1 2.1 0 010 4.2zM7.1 20.5H3.5V9h3.6v11.5z"/></svg>LinkedIn</a>
+      </div>
+    </div>
+    <div class="portrait">
+      <div class="ring"></div>
+      <img src="assets/photo_square.jpg" alt="Portrait of Ajeeth Venkat Prasat" width="480" height="480">
+      <div class="float a"><b>93.58%</b>gait-activity accuracy</div>
+      <div class="float b"><b>IEEE</b>Sensors J. · under review</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap strip reveal">
+  <div class="stats">
+    <div class="stat"><div class="v">3<small>yrs</small></div><div class="l">Industry + applied research</div></div>
+    <div class="stat"><div class="v">5</div><div class="l">Organisations: Cognizant, Fraunhofer EMI, livMatS, Hahn-Schickard, Forge</div></div>
+    <div class="stat"><div class="v">2</div><div class="l">Publications (IEEE Sensors J. under review, IRJET)</div></div>
+    <div class="stat"><div class="v">M.Sc.</div><div class="l">Embedded Systems Engineering, Uni Freiburg</div></div>
+  </div>
+</div>
+
+<section class="thesis" id="thesis">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">01 · Flagship · M.Sc. thesis 2025</div>
+      <h2 class="title">A shoe insole that measures gait using the energy of each footstep</h2>
+      <p class="lede">Intelligent, energy-aware biomedical wearable for continuous gait analysis in rehabilitation. IMTEK Laboratory for the Design of Microsystems &amp; livMatS, University of Freiburg.</p>
+    </div>
+
+    <div class="pra reveal">
+      <div class="card"><div class="eyebrow">Problem</div><h4>Gait is measured in labs, not in life</h4><p>About 2.4 billion people have a condition that could benefit from rehabilitation, yet gait analysis is a short lab snapshot. How patients actually walk at home goes unmeasured.</p></div>
+      <div class="card"><div class="eyebrow">Approach</div><h4>Self-powered sensing + edge AI</h4><p>A triboelectric nanogenerator (TENG) in the heel, a bespoke electrometer front-end for its GΩ-impedance output, an ESP32 and a frequency-domain XGBoost classifier.</p></div>
+      <div class="card"><div class="eyebrow">Result</div><h4>93.58% across four activities</h4><p>An end-to-end validated proof of concept, with the TENG demonstrated as both sensor and energy source. The paper is under review at IEEE Sensors Journal.</p></div>
+    </div>
+
+    <div class="tabs reveal" role="tablist" aria-label="System stages">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="p1" id="t1"><span class="n">01 · SENSE</span><span class="t">TENG insole</span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p2" id="t2"><span class="n">02 · CONDITION</span><span class="t">Analog front-end</span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p3" id="t3"><span class="n">03 · ACQUIRE</span><span class="t">ESP32 &amp; PCB</span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p4" id="t4"><span class="n">04 · INFER</span><span class="t">ML pipeline</span></button>
+    </div>
+
+    <div class="panel on" role="tabpanel" id="p1" aria-labelledby="t1">
+      <div>
+        <h3>A self-powered transducer</h3>
+        <p>A contact-separation TENG: when the heel strikes, copper and PDMS touch and exchange charge; as they separate, the changing gap drives current. Each footstep generates its own signal.</p>
+        <ul><li>2 × 2 cm active area in the heel's peak-force zone</li><li>PDMS dielectric, copper electrodes, 1 mm air gap</li><li>Layer count optimised from 3 to 6 for amplitude</li><li>≈ 800 mV open-circuit, 10.58 µW peak power during gait</li></ul>
+      </div>
+      <div class="figure"><img src="assets/teng_stack.png" alt="TENG layer stack cross-section" loading="lazy"></div>
+    </div>
+    <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2">
+      <div>
+        <h3>Solving the impedance problem</h3>
+        <p>Connected straight to an ADC, a GΩ-impedance source would be loaded and its signal destroyed. The three-stage chain preserves the waveform and maps ±200 mV into 0–3.3 V.</p>
+        <ul><li><b>AD795</b> electrometer, ≤ 0.3 pA bias: under 50 µV error across 10 MΩ</li><li>AC coupling + <b>1.65 V</b> mid-rail bias so neither half-wave clips</li><li><b>TLV2772</b> low-impedance ADC driver on a 3.3 V LDO rail</li></ul>
+      </div>
+      <div class="figure"><img src="assets/analog_front_end.png" alt="Three-stage analog front-end" loading="lazy"></div>
+    </div>
+    <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3">
+      <div>
+        <h3>Custom acquisition board</h3>
+        <p>A two-layer PCB of about 60 × 40 mm feeds the ESP32's 12-bit ADC and streams data wirelessly.</p>
+        <ul><li>Short TENG input trace to minimise parasitic capacitance</li><li>Split ±9 V / 3.3 V domains with a single-point analog/digital ground</li><li>Decoupling within 5 mm of IC power pins</li><li>Modular connectors: sensor, batteries and ADC out</li></ul>
+      </div>
+      <div class="figure"><img src="assets/thesis_pcb.jpg" alt="Signal conditioning PCB layout" loading="lazy"></div>
+    </div>
+    <div class="panel" role="tabpanel" id="p4" aria-labelledby="t4">
+      <div>
+        <h3>From waveform to activity label</h3>
+        <p>TENG waveforms are quasi-periodic and sensitive to contact mechanics, so I moved the problem into the frequency domain, where each activity has its own spectral signature.</p>
+        <ul><li>Sliding-window FFT, 0.2 s hop (99.8 % overlap)</li><li>Dominant frequency, spectral energy and centroid + z-scored height and weight</li><li>XGBoost: 1000 trees, depth 6, softprob outputs</li><li>Trees over LSTM: minutes to train, explainable, MCU-friendly</li></ul>
+      </div>
+      <div class="figure"><img src="assets/ml_pipeline.png" alt="ML pipeline diagram" loading="lazy"></div>
+    </div>
+
+    <div class="results">
+      <div class="card reveal">
+        <div class="eyebrow">Results · 12 participants · 84 recordings</div>
+        <div class="metric-row" style="margin-top:14px">
+          <div class="metric"><div class="v" data-count="93.58" data-dec="2">0<small>%</small></div><div class="l">Accuracy on 122,652 test windows</div></div>
+          <div class="metric"><div class="v">0.94</div><div class="l">Macro F1 (per class 0.93–0.95)</div></div>
+        </div>
+        <div class="eyebrow" style="margin-bottom:14px">Feature importance</div>
+        <div class="bars" id="bars">
+          <div class="barrow"><span>Dominant freq.</span><div class="bartrack"><div class="barfill" data-w="0.368"></div></div><span class="num">0.368</span></div>
+          <div class="barrow"><span>Height</span><div class="bartrack"><div class="barfill warm" data-w="0.288"></div></div><span class="num">0.288</span></div>
+          <div class="barrow"><span>Weight</span><div class="bartrack"><div class="barfill warm" data-w="0.232"></div></div><span class="num">0.232</span></div>
+          <div class="barrow"><span>Spectral energy</span><div class="bartrack"><div class="barfill" data-w="0.075"></div></div><span class="num">0.075</span></div>
+          <div class="barrow"><span>Spectral centroid</span><div class="bartrack"><div class="barfill" data-w="0.038"></div></div><span class="num">0.038</span></div>
+        </div>
+        <div class="legend"><span><i style="background:var(--accent-2)"></i>signal features</span><span><i style="background:var(--warm)"></i>anthropometric</span></div>
+      </div>
+      <div class="card reveal">
+        <div class="eyebrow">Confusion matrix (row-normalised)</div>
+        <div class="figure" style="margin-top:14px"><img src="assets/confusion_matrix.png" alt="Confusion matrix: all four classes between 93 and 95 percent recall" loading="lazy"></div>
+        <p class="figcap">Standing reaches 95% recall. The main confusion (4%) is walking vs running, which sit on a biomechanical continuum.</p>
+      </div>
+    </div>
+
+    <div class="honest">
+      <div class="card reveal"><div class="eyebrow" style="color:var(--warm)">Critical review</div><h4>What I would tighten</h4>
+        <ul><li><b>Subject-level validation:</b> the 75/25 split was made at window level. Leave-one-subject-out is the honest next benchmark.</li><li><b>Identity vs activity:</b> height and weight carry about half the importance, so generalisation to unseen bodies needs checking.</li><li><b>Scale:</b> 12 healthy adults in a lab. Patients and in-the-wild data come next.</li></ul></div>
+      <div class="card next reveal"><div class="eyebrow">Roadmap</div><h4>Where it goes next</h4>
+        <ul><li><b>Battery-less:</b> on-board harvesting and power management.</li><li><b>Sensor fusion:</b> TENG + low-power IMU for gait-phase and quality-of-movement metrics.</li><li><b>On-device inference</b> on the ESP32 for real-time feedback to patients and therapists.</li></ul>
+        <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn small" href="https://github.com/ajeethv27/teng-gait-wearable" target="_blank" rel="noopener">Project write-up →</a><a class="btn small" href="https://github.com/ajeethv27/Gait_Analysis_Project" target="_blank" rel="noopener">Analysis code →</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">02 – 05 · More work</div>
+      <h2 class="title">Robotics, TinyML and connected sensing</h2>
+      <p class="lede">The same pattern across domains: pick the right sensor, clean the signal, compute close to the source and send decisions rather than raw data.</p>
+    </div>
+    <div class="projects">
+      <article class="proj reveal" id="rover">
+        <div class="media"><img src="assets/rover_architecture.png" alt="Rover software architecture" loading="lazy"></div>
+        <div class="body">
+          <div class="meta">Fraunhofer EMI · Student research assistant · 2024</div>
+          <h3>Autonomous sensor-fusion rover</h3>
+          <p>A ROS-based mobile rover that fuses LiDAR, IMU and camera data for autonomous navigation, with the low-level control logic rewritten in C++ on Linux for real-time responsiveness.</p>
+          <div class="kpis"><span class="kpi"><b>95%</b>autonomous navigation</span><span class="kpi"><b>+30%</b>sensor performance</span><span class="kpi"><b>−40%</b>error rate</span></div>
+          <div class="tags"><span class="tag">ROS</span><span class="tag">C++</span><span class="tag">Linux</span><span class="tag">LiDAR</span><span class="tag">IMU</span><span class="tag">filtering</span></div>
+          <p class="note" style="margin-top:14px">Internal research project; code stays with Fraunhofer. Happy to walk through it in an interview.</p>
+        </div>
+      </article>
+      <article class="proj reveal" id="waste">
+        <div class="media"><img src="assets/waste_tinyml.png" alt="TinyML waste monitoring architecture" loading="lazy"></div>
+        <div class="body">
+          <div class="meta">Hahn-Schickard, Freiburg · Start-up project · 2023–24</div>
+          <h3>Smart waste monitoring with TinyML</h3>
+          <p>A low-power motion-tracking node on an Arduino Nano 33 BLE. Accelerometer data is filtered and classified on the device, and only events are sent to the facility team via MQTT.</p>
+          <div class="kpis"><span class="kpi"><b>95%</b>event detection</span><span class="kpi"><b>−40%</b>facility response time</span></div>
+          <div class="tags"><span class="tag">TinyML</span><span class="tag">Nano 33 BLE</span><span class="tag">accelerometer</span><span class="tag">MQTT</span><span class="tag">low power</span></div>
+        </div>
+      </article>
+      <article class="proj reveal" id="sewage">
+        <div class="media photo"><img src="assets/sewage_prototype.jpg" alt="Sewage monitoring prototype" loading="lazy"></div>
+        <div class="body">
+          <div class="meta">B.E. thesis · Kumaraguru College of Technology · 2021</div>
+          <h3>IoT sewage monitoring system</h3>
+          <p>Detects blockage, overflow and hazardous gas in drains. An Arduino Uno reads flow, level, leakage, MQ-2 gas and GPS; an ESP8266 pushes live gauges and alerts to a Blynk app for municipal crews.</p>
+          <div class="kpis"><span class="kpi"><b>4</b>sensors + GPS</span><span class="kpi"><b>3</b>custom PCBs</span></div>
+          <div class="tags"><span class="tag">Arduino</span><span class="tag">ESP8266</span><span class="tag">Blynk</span><span class="tag">PCB design</span><span class="tag">C++</span></div>
+          <div class="foot"><a class="btn small" href="https://github.com/ajeethv27/iot-sewage-monitoring" target="_blank" rel="noopener">Code &amp; schematics →</a></div>
+        </div>
+      </article>
+      <article class="proj reveal" id="energy">
+        <div class="media"><img src="assets/energy_wsn.png" alt="Energy monitoring WSN architecture" loading="lazy"></div>
+        <div class="body">
+          <div class="meta">Forge Innovation &amp; Ventures · Fellowship · 2019</div>
+          <h3>Wireless IoT energy management</h3>
+          <p>An ESP32 wireless sensor network with PCB-mounted current sensors and ML-based analytics that shows where a facility's energy goes and supports predictive maintenance. Published in IRJET (2020).</p>
+          <div class="kpis"><span class="kpi"><b>30–50%</b>savings in facilities</span><span class="kpi"><b>20%</b>research prototype</span></div>
+          <div class="tags"><span class="tag">ESP32</span><span class="tag">current sensing</span><span class="tag">2.4 GHz WSN</span><span class="tag">ML</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="experience" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">06 · Experience</div>
+      <h2 class="title">Industry and applied research</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl reveal"><div class="when">Nov 2024 – Nov 2025</div><div class="card"><h4>Master's Thesis Student</h4><div class="org">livMatS · University of Freiburg</div><ul><li>Precision signal-conditioning PCB (OrCAD) with electrometer buffer and ESP32</li><li>XGBoost + FFT pipeline: 94% accuracy for clinical gait assessment</li><li>PDMS/Cu TENG insole showing battery-free sensing potential</li></ul></div></div>
+      <div class="tl reveal"><div class="when">Feb – Jul 2024</div><div class="card"><h4>Student Research Assistant, Robotics &amp; Sensor Systems</h4><div class="org">Fraunhofer EMI · Freiburg</div><ul><li>ROS rover with LiDAR, IMU and camera fusion: 95% autonomous navigation</li><li>Advanced filtering improved sensor performance by 30%</li><li>C++ low-level control on Linux cut system error rates by 40%</li></ul></div></div>
+      <div class="tl reveal"><div class="when">Aug 2023 – Jan 2024</div><div class="card"><h4>Start-up Project, Smart Waste Monitoring</h4><div class="org">Hahn-Schickard · Freiburg</div><ul><li>TinyML motion tracking on Arduino Nano 33 BLE: 95% event detection</li><li>MQTT real-time alerts: 40% faster facility response</li></ul></div></div>
+      <div class="tl reveal"><div class="when">Mar 2021 – Aug 2022</div><div class="card"><h4>Software Engineer</h4><div class="org">Cognizant · Bengaluru</div><ul><li>Selenium WebDriver framework in Java for Temenos banking software: 45% fewer manual testing cycles</li><li>Biostatistical analysis of clinical data (NumPy, pandas) and Power BI dashboards for healthcare KPIs</li></ul></div></div>
+      <div class="tl reveal"><div class="when">Jul – Dec 2019</div><div class="card"><h4>Graduate Innovation Engineer (Fellowship)</h4><div class="org">Forge Innovation &amp; Ventures · Coimbatore</div><ul><li>IoT energy monitoring with PCB-mounted current sensors and ML: 30–50% energy savings in industrial facilities</li></ul></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">07 · Toolbox</div>
+      <h2 class="title">Skills, with the evidence</h2>
+      <p class="lede">Rather than self-rated percentages, the matrix below shows where each skill was actually used.</p>
+    </div>
+    <div class="skillgrid">
+      <div class="card reveal"><h4>Programming <span>SOFTWARE</span></h4><div class="chips"><span class="chip">C / C++</span><span class="chip">Embedded C</span><span class="chip">Python</span><span class="chip">MATLAB</span><span class="chip">Java</span></div></div>
+      <div class="card reveal"><h4>Embedded <span>MCU · OS</span></h4><div class="chips"><span class="chip">ARM Cortex-M</span><span class="chip">STM32</span><span class="chip">ESP32</span><span class="chip">ESP8266</span><span class="chip">Arduino</span><span class="chip">FreeRTOS</span><span class="chip">Linux</span><span class="chip">ROS</span></div></div>
+      <div class="card reveal"><h4>AI / ML <span>EDGE AI</span></h4><div class="chips"><span class="chip">XGBoost</span><span class="chip">scikit-learn</span><span class="chip">TensorFlow</span><span class="chip">PyTorch</span><span class="chip">TinyML</span><span class="chip">FFT features</span></div></div>
+      <div class="card reveal"><h4>Hardware <span>ANALOG · PCB</span></h4><div class="chips"><span class="chip">Signal conditioning</span><span class="chip">Electrometer front-ends</span><span class="chip">Power electronics</span><span class="chip">OrCAD</span><span class="chip">Altium</span></div></div>
+      <div class="card reveal"><h4>Sensors &amp; protocols <span>I/O</span></h4><div class="chips"><span class="chip">IMU</span><span class="chip">TENG</span><span class="chip">LiDAR</span><span class="chip">CAN</span><span class="chip">SPI</span><span class="chip">UART</span><span class="chip">I²C</span><span class="chip">BLE</span><span class="chip">Wi-Fi</span><span class="chip">MQTT</span></div></div>
+      <div class="card reveal"><h4>Medical devices <span>MEDTECH</span></h4><div class="chips"><span class="chip">Patient-safe low-voltage design</span><span class="chip">EMC for biomedical sensors</span><span class="chip">PoC prototyping</span></div></div>
+    </div>
+    <div class="matrix-wrap reveal">
+      <table class="mx">
+        <thead><tr><th>Skill area</th><th>TENG wearable</th><th>ROS rover</th><th>TinyML waste</th><th>Energy WSN</th><th>Sewage IoT</th><th>Cognizant</th></tr></thead>
+        <tbody>
+          <tr><td>Analog signal conditioning</td><td><i class="d"></i></td><td></td><td></td><td><i class="d h"></i></td><td><i class="d h"></i></td><td></td></tr>
+          <tr><td>PCB design</td><td><i class="d"></i></td><td></td><td></td><td><i class="d"></i></td><td><i class="d"></i></td><td></td></tr>
+          <tr><td>Embedded C/C++ firmware</td><td><i class="d"></i></td><td><i class="d"></i></td><td><i class="d"></i></td><td><i class="d"></i></td><td><i class="d"></i></td><td></td></tr>
+          <tr><td>Linux · ROS</td><td></td><td><i class="d"></i></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Sensor fusion &amp; filtering</td><td><i class="d h"></i></td><td><i class="d"></i></td><td><i class="d"></i></td><td></td><td></td><td></td></tr>
+          <tr><td>Signal processing (FFT)</td><td><i class="d"></i></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Machine learning</td><td><i class="d"></i></td><td></td><td><i class="d"></i></td><td><i class="d"></i></td><td></td><td><i class="d h"></i></td></tr>
+          <tr><td>Wireless &amp; IoT cloud</td><td><i class="d h"></i></td><td></td><td><i class="d"></i></td><td><i class="d"></i></td><td><i class="d"></i></td><td></td></tr>
+          <tr><td>Energy harvesting / low power</td><td><i class="d"></i></td><td></td><td><i class="d"></i></td><td><i class="d h"></i></td><td></td><td></td></tr>
+          <tr><td>Test automation &amp; QA</td><td></td><td></td><td></td><td></td><td></td><td><i class="d"></i></td></tr>
+          <tr><td>Data analysis &amp; dashboards</td><td><i class="d"></i></td><td></td><td></td><td><i class="d h"></i></td><td><i class="d h"></i></td><td><i class="d"></i></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="figcap" style="margin-top:12px"><i class="d" style="width:10px;height:10px;vertical-align:-1px"></i> core to the project &nbsp;&nbsp; <i class="d h" style="width:10px;height:10px;vertical-align:-1px"></i> supporting role</p>
+  </div>
+</section>
+
+<section id="publications" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">08 · Publications &amp; education</div>
+      <h2 class="title">Research record</h2>
+    </div>
+    <div class="pubs">
+      <div class="pub reveal"><div class="yr">2025<small>Under review</small></div><div><h4>Intelligent Biomedical Wearable for Gait Analysis in Rehabilitation</h4><div class="ve">IEEE Sensors Journal</div></div></div>
+      <div class="pub reveal"><div class="yr">2020<small>Published</small></div><div><h4>Energy Management System for Smart Factories</h4><div class="ve">International Research Journal of Engineering and Technology (IRJET), Vol. 7, Issue 9, pp. 3390–3393</div></div></div>
+    </div>
+    <div class="edu">
+      <div class="card reveal"><div class="eyebrow">Oct 2022 – Mar 2026</div><h4>M.Sc. Embedded Systems Engineering</h4><p>Albert-Ludwigs-Universität Freiburg. Focus: circuits &amp; systems, artificial intelligence, renewable &amp; energy harvesting.</p></div>
+      <div class="card reveal"><div class="eyebrow">Aug 2017 – Jun 2021</div><h4>B.E. Electrical &amp; Electronics Engineering</h4><p>Kumaraguru College of Technology (Anna University). Focus: embedded systems, AIoT, product development, signal processing.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="cbox reveal">
+      <div class="eyebrow">09 · Contact</div>
+      <h2>Let's build something that <span>senses, thinks</span> and lasts.</h2>
+      <p>I'm looking for embedded systems roles where hardware, signal processing and machine learning meet, ideally in medical technology, wearables or intelligent IoT. English (C1), German (B1).</p>
+      <div class="cta">
+        <a class="btn primary" href="mailto:ajeethvp@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>ajeethvp@gmail.com</a>
+        <a class="btn" href="https://www.linkedin.com/in/ajeethv" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/ajeethv27" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="Ajeeth_Venkat_Prasat_Engineering_Portfolio.pdf" target="_blank" rel="noopener">Portfolio PDF</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span>© <span id="yr">2026</span> Ajeeth Venkat Prasat · Freiburg im Breisgau</span><span class="mono">built with HTML, CSS &amp; a little canvas</span></div>
+</footer>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  let saved=null; try{saved=localStorage.getItem('theme')}catch(e){}
+  if(saved){root.dataset.theme=saved}
+  else if(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches){root.dataset.theme='light'}
+  document.getElementById('themeBtn').addEventListener('click',()=>{
+    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+    try{localStorage.setItem('theme',root.dataset.theme)}catch(e){}
+  });
+  document.getElementById('yr').textContent=new Date().getFullYear();
+
+  const nav=document.getElementById('nav');
+  const onScroll=()=>nav.classList.toggle('scrolled',scrollY>20); onScroll(); addEventListener('scroll',onScroll,{passive:true});
+  const menu=document.getElementById('menuBtn'),links=document.getElementById('links');
+  menu.addEventListener('click',()=>{const o=links.classList.toggle('open');menu.setAttribute('aria-expanded',o)});
+  links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');menu.setAttribute('aria-expanded',false)}));
+
+  const tabs=[...document.querySelectorAll('.tab')];
+  function select(t){tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);document.getElementById(x.getAttribute('aria-controls')).classList.toggle('on',on)})}
+  tabs.forEach((t,i)=>{t.addEventListener('click',()=>select(t));t.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];n.focus();select(n)}})});
+
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in');
+      el.querySelectorAll('.barfill').forEach(b=>b.style.width=(parseFloat(b.dataset.w)/0.4*100)+'%');
+      el.querySelectorAll('[data-count]').forEach(c=>{const end=parseFloat(c.dataset.count),dec=+c.dataset.dec||0;const t0=performance.now();
+        const step=now=>{const k=reduce?1:Math.min(1,(now-t0)/1400);const v=(end*(1-Math.pow(1-k,3))).toFixed(dec);c.firstChild.nodeValue=v;if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)});
+      io.unobserve(el)}),{threshold:.15}):null;
+  document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.add('in'));
+  if(!io){document.querySelectorAll('.barfill').forEach(b=>b.style.width=(parseFloat(b.dataset.w)/0.4*100)+'%')}
+
+  const cv=document.getElementById('wave'),ctx=cv.getContext('2d');let W,H,dpr;
+  function size(){dpr=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+  size();addEventListener('resize',size);
+  function sig(x,t){const per=150,ph=((x+t)%per+per)%per/per,k=Math.floor((x+t)/per),amp=.7+.3*Math.sin(k*1.3);
+    return 60*amp*Math.exp(-Math.pow((ph-.2)/.035,2))-46*amp*Math.exp(-Math.pow((ph-.55)/.05,2))+6*Math.exp(-3*ph)*Math.sin(2*Math.PI*ph*9)}
+  let t=0;
+  function draw(){ctx.clearRect(0,0,W,H);const cs=getComputedStyle(root);const c=cs.getPropertyValue('--accent-2').trim()||'#06B6D4';const mid=H*.55;
+    ctx.strokeStyle=cs.getPropertyValue('--line').trim();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,mid);ctx.lineTo(W,mid);ctx.stroke();
+    for(const [lw,a] of [[8,.08],[2,.9]]){ctx.globalAlpha=a;ctx.strokeStyle=c;ctx.lineWidth=lw;ctx.beginPath();
+      for(let x=0;x<=W;x+=2){const y=mid-sig(x,t)*(H/220);x?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke()}
+    ctx.globalAlpha=1;const bg=cs.getPropertyValue('--bg').trim(),g=ctx.createLinearGradient(0,0,W,0);g.addColorStop(0,bg);g.addColorStop(.15,bg+'00');g.addColorStop(.85,bg+'00');g.addColorStop(1,bg);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    t+=1.2;if(!reduce)requestAnimationFrame(draw)}
+  draw();
+})();
+</script>
+</body>
+</html>
