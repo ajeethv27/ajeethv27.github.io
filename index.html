@@ -202,7 +202,18 @@ table.mx tbody tr:hover td{background:var(--surface-2)}
 footer{padding:30px 0 40px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
 
-.lede,.hero .role,.card p,.panel p,.proj p,.cbox p,.figcap,.honest li,.tl li,.panel li{text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:7 3 3}
+.lede,.hero .role,.card p,.panel p,.proj p,.cbox p,.figcap,.honest li,.tl li,.panel li,.proto figcaption,.proto .steps li{text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:7 3 3}
+.proto{display:grid;grid-template-columns:1.3fr .72fr 1.15fr;gap:18px;margin-top:18px}
+.proto figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.proto figure img{width:100%;height:380px;object-fit:cover;object-position:center 45%}
+.proto figcaption{padding:14px 18px 16px;font-size:13.5px;color:var(--muted)}
+.proto figcaption b{display:block;color:var(--text);font-family:var(--f-display);font-size:16px;margin-bottom:3px}
+.proto .steps{list-style:none;display:grid;gap:10px;counter-reset:st}
+.proto .steps li{counter-increment:st;position:relative;padding-left:36px;color:var(--text-2);font-size:14.5px}
+.proto .steps li::before{content:counter(st);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:7px;background:var(--accent);color:var(--accent-ink);font-family:var(--f-mono);font-size:12px;display:grid;place-items:center}
+.proto .steps li b{color:var(--text)}
+@media (max-width:980px){.proto{grid-template-columns:1.5fr 1fr}.proto .card{grid-column:1 / -1}.proto figure img{height:440px}}
+@media (max-width:560px){.proto{grid-template-columns:1fr}.proto figure img{height:320px}.proto figure:nth-child(2) img{height:480px}}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
@@ -273,7 +284,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
   <div class="wrap inner">
     <div>
       <span class="status"><i></i>Open to embedded systems roles · Freiburg, DE</span>
-      <h1>Ajeeth Venkat <span>Prasat</span></h1>
+      <h1><span>Ajeeth</span> Venkat Prasat</h1>
       <p class="role"><b>Embedded Systems Engineer.</b> I build the whole chain from sensor to decision: transducers with awkward signals, analog front-ends that tame them, firmware that runs them and edge AI that makes sense of them, mostly for <b>biomedical wearables</b> and <b>intelligent IoT devices</b>.</p>
       <div class="cta">
         <a class="btn primary" href="#thesis">See the flagship project
@@ -356,6 +367,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
         <ul><li>Sliding-window FFT, 0.2 s hop (99.8 % overlap)</li><li>Dominant frequency, spectral energy and centroid + z-scored height and weight</li><li>XGBoost: 1000 trees, depth 6, softprob outputs</li><li>Trees over LSTM: minutes to train, explainable, MCU-friendly</li></ul>
       </div>
       <div class="figure"><img src="assets/ml_pipeline.png" alt="ML pipeline diagram" loading="lazy"></div>
+    </div>
+
+    <div class="proto">
+      <figure class="reveal"><img src="assets/proto_teng_sensor.jpg" alt="Hand-fabricated TENG sensor with its two leads" loading="lazy"><figcaption><b>The sensor</b>Kapton-covered copper top electrode over the PDMS dielectric and PCB-mounted bottom electrode.</figcaption></figure>
+      <figure class="reveal"><img src="assets/proto_insole.jpg" alt="TENG sensor integrated into the heel of a shoe insole" loading="lazy"><figcaption><b>The insole</b>Sensor sealed into the right insole's heel; leads run to the conditioning circuit at the ankle.</figcaption></figure>
+      <div class="card reveal"><div class="eyebrow">Built prototype</div><h4>From bench to study</h4>
+        <ol class="steps">
+          <li><b>Fabricate:</b> PDMS (Sylgard 184) cured on copper, Kapton-laminated top electrode, 1 mm spacer.</li>
+          <li><b>Optimise:</b> 3 → 6 layers, reaching ≈800 mV open-circuit and 10.58 µW peak.</li>
+          <li><b>Integrate:</b> sealed between EVA foam layers at the heel, AWG 30 leads to an ankle enclosure.</li>
+          <li><b>Test:</b> 12 participants × 7 trials = 84 recordings for the classifier.</li>
+        </ol></div>
     </div>
 
     <div class="results">
