@@ -60,9 +60,19 @@ nav .links a:hover::after{right:0}
 #menuBtn{display:none}
 
 .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:120px 0 200px;overflow:hidden}
-.hero canvas{position:absolute;left:0;right:0;bottom:30px;width:100%;height:180px;opacity:.9;pointer-events:none}
+.hero canvas{position:absolute;left:0;right:0;bottom:30px;width:100%;height:180px;opacity:.9;cursor:crosshair;touch-action:pan-y;z-index:1}
+.wave-hint{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);z-index:2;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);background:color-mix(in srgb,var(--bg) 70%,transparent);border:1px solid var(--line);border-radius:999px;padding:4px 12px;pointer-events:none;transition:opacity .3s}
+.wave-hint i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent-2);margin-right:7px;vertical-align:0;animation:ping 2s infinite}
+.hero.probing .wave-hint{opacity:0}
+.wave-tip{position:absolute;z-index:5;width:270px;pointer-events:none;background:var(--surface);border:1px solid var(--line-2);border-radius:12px;padding:11px 14px 12px;box-shadow:var(--shadow);opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s}
+.wave-tip.on{opacity:1;transform:none}
+.wave-tip .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.wave-tip .k.neg{color:var(--warm)}.wave-tip .k.flat{color:var(--muted)}
+.wave-tip b{display:block;font-family:var(--f-display);font-size:16px;color:var(--text);margin:3px 0 4px}
+.wave-tip p{font-size:13px;line-height:1.45;color:var(--text-2);margin:0}
+.wave-tip .src{display:block;margin-top:7px;font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
 .hero .grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 60% 40%,#000 10%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at 60% 40%,#000 10%,transparent 70%);opacity:.5;pointer-events:none}
-.hero .inner{display:grid;grid-template-columns:1.35fr 1fr;gap:60px;align-items:center;position:relative}
+.hero .inner{display:grid;grid-template-columns:1.35fr 1fr;gap:60px;align-items:center;position:relative;z-index:2}
 .status{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12.5px;color:var(--text-2);border:1px solid var(--line-2);background:var(--surface);padding:7px 14px;border-radius:999px}
 .status i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:ping 2s infinite}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}80%,100%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
@@ -251,6 +261,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
   .barrow{grid-template-columns:110px 1fr 44px;font-size:13px}
   .metric-row{grid-template-columns:1fr 1fr}
   .hero canvas{height:130px;bottom:40px}
+  .wave-hint{bottom:40px;font-size:10.5px}
+  .wave-tip{width:240px}
   .hero{padding-bottom:170px}
   .float.tinker{right:-14px;padding:9px 12px 9px 9px;gap:9px}.float.tinker .ic{width:32px;height:32px}.float.tinker b{font-size:16px}
 }
@@ -280,7 +292,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
 
 <header class="hero" id="top">
   <div class="grid-bg"></div>
-  <canvas id="wave" aria-hidden="true"></canvas>
+  <canvas id="wave" role="img" aria-label="Live TENG insole signal: each positive spike is a heel strike, each negative dip is a toe-off, flat stretches are stance and swing."></canvas>
+  <div class="wave-hint" aria-hidden="true"><i></i><span class="hint-txt">Live TENG insole signal · hover to read it</span></div>
+  <div class="wave-tip" id="waveTip" aria-hidden="true"></div>
   <div class="wrap inner">
     <div>
       <span class="status"><i></i>Open to embedded systems roles · Freiburg, DE</span>
@@ -590,18 +604,56 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
   document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.add('in'));
   if(!io){document.querySelectorAll('.barfill').forEach(b=>b.style.width=(parseFloat(b.dataset.w)/0.4*100)+'%')}
 
-  const cv=document.getElementById('wave'),ctx=cv.getContext('2d');let W,H,dpr;
-  function size(){dpr=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
-  size();addEventListener('resize',size);
-  function sig(x,t){const per=150,ph=((x+t)%per+per)%per/per,k=Math.floor((x+t)/per),amp=.7+.3*Math.sin(k*1.3);
+  const hero=document.getElementById('top'),cv=document.getElementById('wave'),ctx=cv.getContext('2d'),tip=document.getElementById('waveTip');let W,H,dpr;
+  if(matchMedia('(hover: none)').matches){const h=document.querySelector('.hint-txt');if(h)h.textContent='Live TENG insole signal · tap to read it'}
+  function size(){dpr=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);if(reduce)draw()}
+  const PER=150;
+  function sig(x,t){const ph=((x+t)%PER+PER)%PER/PER,k=Math.floor((x+t)/PER),amp=.7+.3*Math.sin(k*1.3);
     return 60*amp*Math.exp(-Math.pow((ph-.2)/.035,2))-46*amp*Math.exp(-Math.pow((ph-.55)/.05,2))+6*Math.exp(-3*ph)*Math.sin(2*Math.PI*ph*9)}
-  let t=0;
-  function draw(){ctx.clearRect(0,0,W,H);const cs=getComputedStyle(root);const c=cs.getPropertyValue('--accent-2').trim()||'#06B6D4';const mid=H*.55;
+  // gait phase under the pointer: one cycle = heel strike (+ spike) -> stance (flat) -> toe-off (- dip) -> swing (flat)
+  const PHASES={
+    hs:{k:'Heel strike',cls:'',t:'Positive spike',p:'The heel lands: copper and PDMS touch and swap charge, pushing current one way through the electrodes.'},
+    st:{k:'Stance',cls:'flat',t:'Back to baseline',p:'The foot is flat and the layers stay pressed together. No movement means no charge flow, so the signal returns to zero.'},
+    to:{k:'Toe-off',cls:'neg',t:'Negative dip',p:'The heel lifts: the layers separate across the 1 mm gap and the current reverses, giving the opposite-sign pulse.'},
+    sw:{k:'Swing',cls:'flat',t:'Quiet signal',p:'The foot is in the air and the sensor is unloaded. Only small ringing remains until the next heel strike.'}};
+  function phaseAt(ph){if(ph>=.12&&ph<.29)return'hs';if(ph>=.29&&ph<.45)return'st';if(ph>=.45&&ph<.68)return'to';return'sw'}
+  let t=0,probe=null,last=0;
+  function draw(){ctx.clearRect(0,0,W,H);const cs=getComputedStyle(root);const c=cs.getPropertyValue('--accent-2').trim()||'#06B6D4',warm=cs.getPropertyValue('--warm').trim(),txt=cs.getPropertyValue('--text-2').trim(),mono=cs.getPropertyValue('--f-mono');const mid=H*.55,sc=H/220,Y=x=>mid-sig(x,t)*sc;
+    let ph=null,k=0;
+    if(probe!==null){ph=((probe+t)%PER+PER)%PER/PER;k=Math.floor((probe+t)/PER);
+      const x0=k*PER-t,id=phaseAt(ph),band=id==='sw'&&ph<.12?[-.32,.12]:{hs:[.12,.29],st:[.29,.45],to:[.45,.68],sw:[.68,1.12]}[id];
+      ctx.fillStyle=id==='to'?warm:c;ctx.globalAlpha=.09;ctx.fillRect(x0+band[0]*PER,0,(band[1]-band[0])*PER,H);ctx.globalAlpha=1}
     ctx.strokeStyle=cs.getPropertyValue('--line').trim();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,mid);ctx.lineTo(W,mid);ctx.stroke();
     for(const [lw,a] of [[8,.08],[2,.9]]){ctx.globalAlpha=a;ctx.strokeStyle=c;ctx.lineWidth=lw;ctx.beginPath();
-      for(let x=0;x<=W;x+=2){const y=mid-sig(x,t)*(H/220);x?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke()}
-    ctx.globalAlpha=1;const bg=cs.getPropertyValue('--bg').trim(),g=ctx.createLinearGradient(0,0,W,0);g.addColorStop(0,bg);g.addColorStop(.15,bg+'00');g.addColorStop(.85,bg+'00');g.addColorStop(1,bg);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    t+=1.2;if(!reduce)requestAnimationFrame(draw)}
+      for(let x=0;x<=W;x+=2){const y=Y(x);x?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke()}
+    ctx.globalAlpha=1;
+    if(probe!==null){const x0=k*PER-t,hx=x0+.2*PER,tx=x0+.55*PER;
+      ctx.font='10.5px '+mono;ctx.textAlign='center';
+      ctx.fillStyle=c;ctx.beginPath();ctx.arc(hx,Y(hx),3.5,0,7);ctx.fill();ctx.fillText('heel strike',hx,Y(hx)-9);
+      ctx.fillStyle=warm;ctx.beginPath();ctx.arc(tx,Y(tx),3.5,0,7);ctx.fill();ctx.fillText('toe-off',tx,Y(tx)+17);
+      ctx.strokeStyle=txt;ctx.globalAlpha=.35;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(probe,0);ctx.lineTo(probe,H);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
+      ctx.fillStyle=txt;ctx.beginPath();ctx.arc(probe,Y(probe),4.5,0,7);ctx.fill();
+      ctx.strokeStyle=c;ctx.lineWidth=2;ctx.beginPath();ctx.arc(probe,Y(probe),7,0,7);ctx.stroke();
+      updateTip(phaseAt(ph),probe,Y(probe),x0)}
+    const bg=cs.getPropertyValue('--bg').trim(),g=ctx.createLinearGradient(0,0,W,0);g.addColorStop(0,bg);g.addColorStop(.12,bg+'00');g.addColorStop(.88,bg+'00');g.addColorStop(1,bg);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    t+=probe===null?1.2:.18;if(!reduce)requestAnimationFrame(draw)}
+  let lastId='';
+  function updateTip(id,x,y,x0){const P=PHASES[id];
+    if(id!==lastId){tip.innerHTML='<span class="k '+P.cls+'">'+P.k+'</span><b>'+P.t+'</b><p>'+P.p+'</p><span class="src">TENG heel sensor · ≈ ±200 mV</span>';lastId=id}
+    const hr=hero.getBoundingClientRect(),cr=cv.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+    const ox=cr.left-hr.left,oy=cr.top-hr.top;let left,top;
+    if(W>=700){ // beside the explained cycle, so its labels stay visible
+      left=ox+x0+PER+14; if(left+tw>hr.width-12) left=ox+x0-tw-14;
+      top=oy+(H-th)/2;
+    }else{left=ox+x-tw/2;top=oy+y-th-22}
+    left=Math.max(12,Math.min(hr.width-tw-12,left));
+    tip.style.left=left+'px';tip.style.top=Math.max(8,top)+'px'}
+  function setProbe(e){const r=cv.getBoundingClientRect();probe=Math.max(0,Math.min(r.width,e.clientX-r.left));hero.classList.add('probing');tip.classList.add('on');if(reduce)draw()}
+  function clearProbe(){probe=null;lastId='';hero.classList.remove('probing');tip.classList.remove('on');if(reduce)draw()}
+  cv.addEventListener('pointermove',e=>{if(e.pointerType==='mouse')setProbe(e)});
+  cv.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')clearProbe()});
+  cv.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'){setProbe(e);clearTimeout(cv._tm);cv._tm=setTimeout(clearProbe,4000)}});
+  size();addEventListener('resize',size);
   draw();
 })();
 </script>
