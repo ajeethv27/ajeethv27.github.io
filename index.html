@@ -213,6 +213,11 @@ footer{padding:30px 0 40px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
 
 .lede,.hero .role,.card p,.panel p,.proj p,.cbox p,.figcap,.honest li,.tl li,.panel li,.proto figcaption,.proto .steps li{text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:7 3 3}
+.motive{margin:0 0 28px;max-width:860px;padding:22px 28px 24px;border-left:3px solid var(--warm);background:color-mix(in srgb,var(--warm) 8%,var(--surface));border-radius:0 var(--radius) var(--radius) 0}
+.motive .eyebrow{color:var(--warm);margin-bottom:8px}
+.motive blockquote{margin:0;font-family:var(--f-display);font-size:clamp(17px,1.8vw,20px);line-height:1.5;color:var(--text-2);text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto}
+.motive blockquote strong{color:var(--text);font-weight:600}
+@media (max-width:760px){.motive{padding:18px 18px 20px}}
 .proto{display:grid;grid-template-columns:1.3fr .72fr 1.15fr;gap:18px;margin-top:18px}
 .proto figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
 .proto figure img{width:100%;height:380px;object-fit:cover;object-position:center 45%}
@@ -336,6 +341,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
       <h2 class="title">A shoe insole that measures gait using the energy of each footstep</h2>
       <p class="lede">Intelligent, energy-aware biomedical wearable for continuous gait analysis in rehabilitation. IMTEK Laboratory for the Design of Microsystems &amp; livMatS, University of Freiburg.</p>
     </div>
+
+    <figure class="motive reveal">
+      <div class="eyebrow">Personal motivation</div>
+      <blockquote>I tore my ACL playing football. During rehabilitation, my progress was judged in brief clinic visits, and how I actually walked between appointments went unseen. The missing clinical feedback slowed my recovery. So I did what an engineer does: I built a prototype to bridge the gap. <strong>This insole is that prototype.</strong></blockquote>
+    </figure>
 
     <div class="pra reveal">
       <div class="card"><div class="eyebrow">Problem</div><h4>Gait is measured in labs, not in life</h4><p>About 2.4 billion people have a condition that could benefit from rehabilitation, yet gait analysis is a short lab snapshot. How patients actually walk at home goes unmeasured.</p></div>
